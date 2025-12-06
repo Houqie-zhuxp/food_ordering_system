@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rabbiter.ordering.mapper.FoodsMapper">
+
+    <insert id="insert">
+        insert into foods (name, descr, price, img)
+        values (#{name}, #{descr}, #{price}, #{img})
+    </insert>
+
+
+    <update id="updateById">
+        update foods
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="descr != null">descr = #{descr},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="img != null">img = #{img},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from foods
+        where id = #{id}
+    </delete>
+
+    <select id="findAll" resultType="com.rabbiter.ordering.entity.Foods">
+        select * from foods
+        <where>
+            <if test="params != null and params.name != null and params.name != ''">
+                and name like concat('%', #{ params.name }, '%')
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+</mapper>
